@@ -1,0 +1,1 @@
+Practicas de la materia PROCESAMIENTO DIGITAL DE IMAGENES 2024
