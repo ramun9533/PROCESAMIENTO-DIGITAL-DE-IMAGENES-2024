@@ -45,6 +45,12 @@ def cargarImagen_mascara():
         final_image = cv2.imread(filename)
         setPhoto_mascara(final_image)
 
+def cargarImagen_degradado():
+    global filename, final_image
+    if filename:
+        final_image = cv2.imread(filename)
+        setPhoto_degradado(final_image)
+
 def salvarImagen():
     global final_image
     if final_image is not None:
@@ -83,7 +89,6 @@ def setPhoto_canny(image):
     imagen = imagen.scaled(400, 280, Qt.KeepAspectRatio)
     window.label_2.setPixmap(QtGui.QPixmap.fromImage(imagen))
 
-#def setPhoto_mascara(image):
 def setPhoto_mascara(image):
     global final_image
     
@@ -120,6 +125,36 @@ def setPhoto_mascara(image):
     qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
     window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
     
+#def setPhoto_degradado(image):
+def setPhoto_degradado(image):
+    global final_image
+    # Convertir la imagen a escala de grises si es necesario
+    if len(image.shape) > 2:
+        image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        image_gray = image
+
+    # Crear una matriz de ceros del mismo tamaño que la imagen en escala de grises
+    matriz = np.zeros_like(image_gray, dtype=np.float32)
+
+    # Llenar la matriz con un degradado
+    for i in range(matriz.shape[0]):
+        for j in range(matriz.shape[1]):
+            matriz[i, j] = (i + j) / (matriz.shape[0] + matriz.shape[1])
+
+    # Aplicar el degradado a la imagen de escala de grises
+    image_degradada = np.multiply(image_gray, matriz)
+
+    # Convertir los valores de la imagen degradada a valores de 8 bits
+    image_degradada = np.clip(image_degradada, 0, 255).astype(np.uint8)
+
+    # Visualizar la imagen degradada en el widget correspondiente en la interfaz gráfica
+    frame = cv2.cvtColor(image_degradada, cv2.COLOR_GRAY2RGB)
+    height, width, channel = frame.shape
+    bytes_per_line = 3 * width
+    qImg = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
+    qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
+    window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
 
 
 def salir():
@@ -133,6 +168,7 @@ window.canny.clicked.connect(cargarImagen_canny)
 window.salir.clicked.connect(salir)
 window.guardar.clicked.connect(salvarImagen)
 window.mascara_imagen.clicked.connect(cargarImagen_mascara)
+window.degradado_imagen.clicked.connect(cargarImagen_degradado)
 # Ejecutable
 window.show()
 app.exec()
