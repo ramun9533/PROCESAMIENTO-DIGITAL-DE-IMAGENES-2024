@@ -76,7 +76,7 @@ background-color: rgb(253, 240, 118);</string>
      <number>300</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="gris">
+   <widget class="QPushButton" name="mascara_imagen">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -94,7 +94,7 @@ color: rgb(0, 0, 0);
 background-color: rgb(119, 199, 201);</string>
     </property>
     <property name="text">
-     <string>Imagen Gris</string>
+     <string>Mascara</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -117,7 +117,7 @@ border-radius:15px;</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="blur">
+   <widget class="QPushButton" name="degradado_imagen">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -135,7 +135,7 @@ color: rgb(0, 0, 0);
 background-color: rgb(119, 199, 201);</string>
     </property>
     <property name="text">
-     <string>Imagen Blur</string>
+     <string>Degradado</string>
     </property>
    </widget>
    <widget class="QPushButton" name="canny">
@@ -293,7 +293,7 @@ background-color: rgb(119, 199, 201);</string>
      <string>Imagen Gris</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="blur_3">
+   <widget class="QPushButton" name="blur">
     <property name="geometry">
      <rect>
       <x>580</x>
@@ -356,7 +356,7 @@ background-color: rgb(119, 199, 201);</string>
      <string>Imagen Blur</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="gris_4">
+   <widget class="QPushButton" name="gris">
     <property name="geometry">
      <rect>
       <x>250</x>
