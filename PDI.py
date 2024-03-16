@@ -51,6 +51,12 @@ def cargarImagen_degradado():
         final_image = cv2.imread(filename)
         setPhoto_degradado(final_image)
 
+def cargarImagen_recortar():
+    global filename, final_image
+    if filename:
+        final_image = cv2.imread(filename)
+        setPhoto_recortar(final_image)
+
 def salvarImagen():
     global final_image
     if final_image is not None:
@@ -156,6 +162,45 @@ def setPhoto_degradado(image):
     qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
     window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
 
+def setPhoto_recortar(image):
+    global final_image
+
+    # Convertir la imagen a escala de grises si es necesario
+    if len(image.shape) > 2:
+        image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        image_gray = image
+
+    # Obtener las dimensiones de la imagen
+    height, width = image_gray.shape[0:2]
+
+    # Calcular las coordenadas para el recorte
+    starRow = int(height * .15)
+    starCol = int(width * .15)
+    endRow = int(height * .85)
+    endCol = int(width * .85)
+
+    # Recortar la región de interés
+    croppedImage = image_gray[starRow:endRow, starCol:endCol]
+
+    # Convertir la imagen recortada a formato QImage
+    if len(croppedImage.shape) > 2:
+        # Si es una imagen a color, convertir a RGB
+        croppedImage = cv2.cvtColor(croppedImage, cv2.COLOR_BGR2RGB)
+    else:
+        # Si es una imagen en escala de grises, mantener el formato
+        croppedImage = cv2.cvtColor(croppedImage, cv2.COLOR_GRAY2RGB)
+
+    # Escalar la imagen para mostrarla en el widget de la interfaz gráfica
+    height, width, channel = croppedImage.shape
+    bytes_per_line = 3 * width
+    qImg = QImage(croppedImage.data, width, height, bytes_per_line, QImage.Format_RGB888)
+    qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
+
+    # Mostrar la imagen recortada en el widget correspondiente
+    window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
+
+
 
 def salir():
     app.exit()
@@ -169,6 +214,8 @@ window.salir.clicked.connect(salir)
 window.guardar.clicked.connect(salvarImagen)
 window.mascara_imagen.clicked.connect(cargarImagen_mascara)
 window.degradado_imagen.clicked.connect(cargarImagen_degradado)
+window.recortar_imagen.clicked.connect(cargarImagen_recortar)
+
 # Ejecutable
 window.show()
 app.exec()
