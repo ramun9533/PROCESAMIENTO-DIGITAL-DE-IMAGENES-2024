@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtGui import QImage
 import cv2
 import time
-
+import numpy as np
 # Iniciar la aplicación
 app = QtWidgets.QApplication([])
 
@@ -38,6 +38,12 @@ def cargarImagen_canny():
     if filename:
         final_image = cv2.imread(filename)
         setPhoto_canny(final_image)
+
+def cargarImagen_mascara():
+    global filename, final_image
+    if filename:
+        final_image = cv2.imread(filename)
+        setPhoto_mascara(final_image)
 
 def salvarImagen():
     global final_image
@@ -77,6 +83,45 @@ def setPhoto_canny(image):
     imagen = imagen.scaled(400, 280, Qt.KeepAspectRatio)
     window.label_2.setPixmap(QtGui.QPixmap.fromImage(imagen))
 
+#def setPhoto_mascara(image):
+def setPhoto_mascara(image):
+    global final_image
+    
+    # Convertir la imagen a escala de grises si es necesario
+    if len(image.shape) > 2:
+        image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        image_gray = image
+
+    # Crear una matriz de ceros del mismo tamaño que la imagen en escala de grises
+    mask = np.zeros_like(image_gray)
+
+    # Definir el centro y el radio del círculo
+    cy, cx = mask.shape[0] // 2, mask.shape[1] // 2
+    radius = 150
+
+    # Modificar la matriz para contener unos dentro del círculo
+    for i in range(mask.shape[0]):
+        for j in range(mask.shape[1]):
+            if (i - cy) ** 2 + (j - cx) ** 2 < radius ** 2:
+                mask[i, j] = 1
+
+    # Aplicar la máscara a la imagen en escala de grises
+    result = image_gray * mask
+
+    # Convertir la imagen resultante de nuevo a RGB
+    result_rgb = cv2.cvtColor(result.astype(np.uint8), cv2.COLOR_GRAY2RGB)
+
+    # Mostrar el resultado en el widget correspondiente en la interfaz gráfica
+    frame = cv2.cvtColor(result_rgb, cv2.COLOR_BGR2RGB)
+    height, width, channel = frame.shape
+    bytes_per_line = 3 * width
+    qImg = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
+    qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
+    window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
+    
+
+
 def salir():
     app.exit()
 
@@ -87,7 +132,7 @@ window.blur.clicked.connect(cargarImagen_blur)
 window.canny.clicked.connect(cargarImagen_canny)
 window.salir.clicked.connect(salir)
 window.guardar.clicked.connect(salvarImagen)
-
+window.mascara_imagen.clicked.connect(cargarImagen_mascara)
 # Ejecutable
 window.show()
 app.exec()
