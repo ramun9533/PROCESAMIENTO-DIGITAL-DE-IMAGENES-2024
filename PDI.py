@@ -57,6 +57,13 @@ def cargarImagen_ajustar_contraste():
         final_image = cv2.imread(filename)
         setPhoto_ajustar_contraste(final_image)
 
+def cargarImagen_borrosa():
+    global filename, final_image
+    if filename:
+        final_image = cv2.imread(filename)
+        setPhoto_borrosa(final_image)
+
+
 def cargarImagen_recortar():
     global filename, final_image
     if filename:
@@ -270,6 +277,26 @@ def setPhoto_ajustar_contraste(image):
     
     # Mostrar la imagen en el widget correspondiente
     window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
+    
+    
+def setPhoto_borrosa(image):
+    #def setPhoto_borrosa(image):
+    global final_image
+    
+    # Aplicar desenfoque gaussiano a la imagen
+    blur_image = cv2.GaussianBlur(image, (7, 7), 0)
+    final_image = blur_image
+        
+    # Convertir la imagen a formato QImage para mostrarla en la interfaz gráfica
+    frame = cv2.cvtColor(blur_image, cv2.COLOR_BGR2RGB)
+    height, width, channel = frame.shape
+    bytes_per_line = 3 * width
+    qImg = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
+    qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
+
+    # Mostrar la imagen en el widget correspondiente
+    window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
+  
 
 
 def salir():
@@ -287,6 +314,7 @@ window.degradado_imagen.clicked.connect(cargarImagen_degradado)
 window.recortar_imagen.clicked.connect(cargarImagen_recortar)
 window.bordes.clicked.connect(cargarImagen_detectar_bordes)
 window.ajustar_contraste.clicked.connect(cargarImagen_ajustar_contraste)
+window.borrosa.clicked.connect(cargarImagen_borrosa)
 # Ejecutable
 window.show()
 app.exec()
