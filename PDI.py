@@ -51,6 +51,12 @@ def cargarImagen_degradado():
         final_image = cv2.imread(filename)
         setPhoto_degradado(final_image)
 
+def cargarImagen_ajustar_contraste():
+    global filename, final_image
+    if filename:
+        final_image = cv2.imread(filename)
+        setPhoto_ajustar_contraste(final_image)
+
 def cargarImagen_recortar():
     global filename, final_image
     if filename:
@@ -240,6 +246,30 @@ def setPhoto_bordes(image):
     final_image = edge_img
 
 
+def setPhoto_ajustar_contraste(image):
+    #def setPhoto_ajustar_contraste(image):
+    global final_image
+
+    # Ajustar el contraste de la imagen
+    contrast_img = cv2.addWeighted(image, 2.5, np.zeros(image.shape, image.dtype), 0, 0)
+        
+    # Convertir la imagen a formato QImage para mostrarla en la interfaz gráfica
+    frame = cv2.cvtColor(contrast_img, cv2.COLOR_BGR2RGB)
+    height, width, channel = frame.shape
+    bytes_per_line = 3 * width
+    qImg = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
+    qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
+
+    global filename
+    if filename:
+        tiempo = time.strftime("%d-%m-%Y-%H-%M-%S")
+        cv2.imwrite(f"ajustar_contraste_{tiempo}.jpg", contrast_img)
+        print("Imagen con contraste ajustado guardada")
+    
+    # Mostrar la imagen en el widget correspondiente
+    window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
+
+
 def salir():
     app.exit()
 
@@ -254,6 +284,7 @@ window.mascara_imagen.clicked.connect(cargarImagen_mascara)
 window.degradado_imagen.clicked.connect(cargarImagen_degradado)
 window.recortar_imagen.clicked.connect(cargarImagen_recortar)
 window.bordes.clicked.connect(cargarImagen_detectar_bordes)
+window.ajustar_contraste.clicked.connect(cargarImagen_ajustar_contraste)
 # Ejecutable
 window.show()
 app.exec()
