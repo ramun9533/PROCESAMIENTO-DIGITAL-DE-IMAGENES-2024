@@ -79,8 +79,8 @@ background-color: rgb(253, 240, 118);</string>
    <widget class="QPushButton" name="mascara_imagen">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>360</y>
+      <x>360</x>
+      <y>400</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -120,8 +120,8 @@ border-radius:15px;</string>
    <widget class="QPushButton" name="degradado_imagen">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>400</y>
+      <x>360</x>
+      <y>320</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -141,8 +141,8 @@ background-color: rgb(119, 199, 201);</string>
    <widget class="QPushButton" name="canny">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>320</y>
+      <x>580</x>
+      <y>360</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -251,11 +251,11 @@ background-color: rgb(114, 186, 100);</string>
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="blur_2">
+   <widget class="QPushButton" name="bordes">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>400</y>
+      <x>250</x>
+      <y>360</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -269,7 +269,7 @@ color: rgb(0, 0, 0);
 background-color: rgb(119, 199, 201);</string>
     </property>
     <property name="text">
-     <string>Imagen Blur</string>
+     <string>Bordes</string>
     </property>
    </widget>
    <widget class="QPushButton" name="gris_2">
@@ -297,7 +297,7 @@ background-color: rgb(119, 199, 201);</string>
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>360</y>
+      <y>400</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -314,11 +314,11 @@ background-color: rgb(119, 199, 201);</string>
      <string>Imagen Blur</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="gris_3">
+   <widget class="QPushButton" name="recortar_imagen">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>320</y>
+      <x>250</x>
+      <y>400</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -332,7 +332,7 @@ color: rgb(0, 0, 0);
 background-color: rgb(119, 199, 201);</string>
     </property>
     <property name="text">
-     <string>Imagen Gris</string>
+     <string>Recortar</string>
     </property>
    </widget>
    <widget class="QPushButton" name="blur_4">
@@ -380,7 +380,7 @@ background-color: rgb(119, 199, 201);</string>
    <widget class="QPushButton" name="canny_2">
     <property name="geometry">
      <rect>
-      <x>580</x>
+      <x>470</x>
       <y>400</y>
       <width>91</width>
       <height>31</height>
@@ -398,11 +398,11 @@ background-color: rgb(119, 199, 201);</string>
      <string>Imagen Canny</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="blur_5">
+   <widget class="QPushButton" name="ajustar_contraste">
     <property name="geometry">
      <rect>
       <x>470</x>
-      <y>400</y>
+      <y>320</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -416,10 +416,10 @@ color: rgb(0, 0, 0);
 background-color: rgb(119, 199, 201);</string>
     </property>
     <property name="text">
-     <string>Imagen Blur</string>
+     <string>Contraste</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="gris_5">
+   <widget class="QPushButton" name="borrosa">
     <property name="geometry">
      <rect>
       <x>470</x>
@@ -437,7 +437,7 @@ color: rgb(0, 0, 0);
 background-color: rgb(119, 199, 201);</string>
     </property>
     <property name="text">
-     <string>Imagen Gris</string>
+     <string>Borrosa</string>
     </property>
    </widget>
   </widget>
