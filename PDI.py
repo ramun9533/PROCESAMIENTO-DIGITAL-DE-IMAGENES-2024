@@ -57,6 +57,13 @@ def cargarImagen_recortar():
         final_image = cv2.imread(filename)
         setPhoto_recortar(final_image)
 
+def cargarImagen_detectar_bordes():
+    global filename, final_image
+    if filename:
+        final_image = cv2.imread(filename)
+        setPhoto_bordes(final_image)
+
+
 def salvarImagen():
     global final_image
     if final_image is not None:
@@ -131,7 +138,7 @@ def setPhoto_mascara(image):
     qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
     window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
     
-#def setPhoto_degradado(image):
+
 def setPhoto_degradado(image):
     global final_image
     # Convertir la imagen a escala de grises si es necesario
@@ -166,13 +173,13 @@ def setPhoto_recortar(image):
     global final_image
 
     # Convertir la imagen a escala de grises si es necesario
-    if len(image.shape) > 2:
-        image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    else:
-        image_gray = image
+    #if len(image.shape) > 2:
+    #    image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    #else:
+    #    image_gray = image
 
     # Obtener las dimensiones de la imagen
-    height, width = image_gray.shape[0:2]
+    height, width = image.shape[0:2]
 
     # Calcular las coordenadas para el recorte
     starRow = int(height * .15)
@@ -181,15 +188,15 @@ def setPhoto_recortar(image):
     endCol = int(width * .85)
 
     # Recortar la región de interés
-    croppedImage = image_gray[starRow:endRow, starCol:endCol]
+    croppedImage = image[starRow:endRow, starCol:endCol]
 
     # Convertir la imagen recortada a formato QImage
-    if len(croppedImage.shape) > 2:
+    #if len(croppedImage.shape) > 2:
         # Si es una imagen a color, convertir a RGB
-        croppedImage = cv2.cvtColor(croppedImage, cv2.COLOR_BGR2RGB)
-    else:
+    croppedImage = cv2.cvtColor(croppedImage, cv2.COLOR_BGR2RGB)
+    #else:
         # Si es una imagen en escala de grises, mantener el formato
-        croppedImage = cv2.cvtColor(croppedImage, cv2.COLOR_GRAY2RGB)
+    #    croppedImage = cv2.cvtColor(croppedImage, cv2.COLOR_GRAY2RGB)
 
     # Escalar la imagen para mostrarla en el widget de la interfaz gráfica
     height, width, channel = croppedImage.shape
@@ -197,9 +204,40 @@ def setPhoto_recortar(image):
     qImg = QImage(croppedImage.data, width, height, bytes_per_line, QImage.Format_RGB888)
     qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
 
+    # Guardar la imagen recortada
+    global filename
+    if filename:
+        tiempo = time.strftime("%d-%m-%Y-%H-%M-%S")
+        cv2.imwrite(f"recorte_{tiempo}.jpg", croppedImage)
+        print("Imagen recortada guardada")
+
     # Mostrar la imagen recortada en el widget correspondiente
     window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
 
+#def setPhoto_bordes():
+
+def setPhoto_bordes(image):
+    global final_image
+    
+    # Convertir la imagen a escala de grises si es necesario
+    if len(image.shape) > 2:
+        img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        img = image
+
+    # Detectar los bordes utilizando el algoritmo Canny
+    edge_img = cv2.Canny(img, 100, 200)
+
+    # Mostrar la imagen con bordes detectados en el widget correspondiente
+    frame = cv2.cvtColor(edge_img, cv2.COLOR_GRAY2RGB)
+    height, width, channel = frame.shape
+    bytes_per_line = 3 * width
+    qImg = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
+    qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
+    window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
+
+    # Almacenar la imagen final con bordes detectados para futuras operaciones
+    final_image = edge_img
 
 
 def salir():
@@ -215,7 +253,7 @@ window.guardar.clicked.connect(salvarImagen)
 window.mascara_imagen.clicked.connect(cargarImagen_mascara)
 window.degradado_imagen.clicked.connect(cargarImagen_degradado)
 window.recortar_imagen.clicked.connect(cargarImagen_recortar)
-
+window.bordes.clicked.connect(cargarImagen_detectar_bordes)
 # Ejecutable
 window.show()
 app.exec()
