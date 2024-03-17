@@ -251,20 +251,22 @@ def setPhoto_ajustar_contraste(image):
     global final_image
 
     # Ajustar el contraste de la imagen
-    contrast_img = cv2.addWeighted(image, 2.5, np.zeros(image.shape, image.dtype), 0, 0)
+    final_image = cv2.addWeighted(image, 2.5, np.zeros(image.shape, image.dtype), 0, 0)
         
     # Convertir la imagen a formato QImage para mostrarla en la interfaz gráfica
-    frame = cv2.cvtColor(contrast_img, cv2.COLOR_BGR2RGB)
+    frame = cv2.cvtColor(final_image, cv2.COLOR_BGR2RGB)
     height, width, channel = frame.shape
     bytes_per_line = 3 * width
     qImg = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
     qImg = qImg.scaled(400, 280, Qt.KeepAspectRatio)
-
-    global filename
-    if filename:
-        tiempo = time.strftime("%d-%m-%Y-%H-%M-%S")
-        cv2.imwrite(f"ajustar_contraste_{tiempo}.jpg", contrast_img)
-        print("Imagen con contraste ajustado guardada")
+#*****************************************    
+#Este es un ejemplo para quitar el bug de doble guardado
+#***********************************************
+    #global filename
+    #if filename:
+    #    tiempo = time.strftime("%d-%m-%Y-%H-%M-%S")
+    #    cv2.imwrite(f"ajustar_contraste_{tiempo}.jpg", contrast_img)
+    #    print("Imagen con contraste ajustado guardada")
     
     # Mostrar la imagen en el widget correspondiente
     window.label_2.setPixmap(QtGui.QPixmap.fromImage(qImg))
